@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import useThemeStore from './store/themeStore';
-import Settings from './pages/Settings';
 import {
   Dashboard as DashboardIcon,
   Timer as TimerIcon,
@@ -14,14 +13,15 @@ import {
 } from '@mui/icons-material';
 
 // Pages
-import Dashboard from './pages/Dashboard';
-import Pomodoro from './pages/Pomodoro';
-import TaskList from './pages/TaskList';
-import Rewards from './pages/Rewards';
-import Profile from './pages/Profile';
+import Dashboard from './pages/dashboard/Dashboard';
+import Pomodoro from './pages/pomodoro/Pomodoro';
+import TaskList from './pages/tasks/TaskList';
+import Rewards from './pages/rewards/Rewards';
+import Profile from './pages/profile/Profile';
+import Settings from './pages/settings/Settings';
 
 // Components
-import Layout from './components/Layout';
+import Layout from './components/layout/Layout';
 
 function App() {
   const darkMode = useThemeStore((state) => state.darkMode);
