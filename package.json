@@ -1,18 +1,51 @@
 {
-  "name": "html-css",
+  "name": "adhd-focus-app",
   "version": "1.0.0",
-  "description": "A template for HTML and CSS",
-  "main": "index.html",
+  "description": "A focused app designed to help individuals with ADHD manage tasks and stay motivated",
+  "main": "src/index.js",
   "scripts": {
-    "start": "serve"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "keywords": [
-    "html",
-    "css"
+    "adhd",
+    "productivity",
+    "pomodoro",
+    "task-management"
   ],
-  "author": "Ives van Hoorne",
+  "author": "",
   "license": "MIT",
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.13.0",
+    "@mui/icons-material": "^5.11.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "react-router-dom": "^6.11.1",
+    "recharts": "^2.6.2",
+    "zustand": "^4.3.8"
+  },
   "devDependencies": {
-    "serve": "11.2.0"
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "eslint": "^8.40.0",
+    "eslint-config-react-app": "^7.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
