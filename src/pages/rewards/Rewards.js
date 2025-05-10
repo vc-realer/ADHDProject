@@ -24,8 +24,8 @@ import {
   StepLabel,
   StepContent,
 } from '@mui/material';
-import useRewardStore from '../store/rewardStore';
-import useSoundStore from '../store/soundStore';
+import useRewardStore from '../../store/rewardStore';
+import useSoundStore from '../../store/soundStore';
 import HelpIcon from '@mui/icons-material/Help';
 
 const rarityColors = {

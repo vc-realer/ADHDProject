@@ -29,10 +29,10 @@ import {
   Restore as RestoreIcon,
   Help as HelpIcon,
 } from '@mui/icons-material';
-import usePomodoroStore from '../store/pomodoroStore';
-import useRewardStore from '../store/rewardStore';
-import useSoundStore from '../store/soundStore';
-import useTaskStore from '../store/taskStore';
+import usePomodoroStore from '../../store/pomodoroStore';
+import useRewardStore from '../../store/rewardStore';
+import useSoundStore from '../../store/soundStore';
+import useTaskStore from '../../store/taskStore';
 
 const POMODORO_DURATIONS = [15, 25, 45, 60, 90, 120];
 const BREAK_DURATIONS = [5, 10, 15];

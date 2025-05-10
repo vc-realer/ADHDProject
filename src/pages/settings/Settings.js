@@ -17,9 +17,9 @@ import {
   DarkMode as DarkModeIcon,
   Language as LanguageIcon,
 } from '@mui/icons-material';
-import useSoundStore from '../store/soundStore';
-import useThemeStore from '../store/themeStore';
-import useNotificationStore from '../store/notificationStore';
+import useSoundStore from '../../store/soundStore';
+import useThemeStore from '../../store/themeStore';
+import useNotificationStore from '../../store/notificationStore';
 
 function Settings() {
   const soundEnabled = useSoundStore((state) => state.soundEnabled);

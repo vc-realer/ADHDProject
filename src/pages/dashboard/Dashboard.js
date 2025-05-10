@@ -33,9 +33,9 @@ import {
   Line,
 } from 'recharts';
 import HelpIcon from '@mui/icons-material/Help';
-import useTaskStore from '../store/taskStore';
-import usePomodoroStore from '../store/pomodoroStore';
-import useRewardStore from '../store/rewardStore';
+import useTaskStore from '../../store/taskStore';
+import usePomodoroStore from '../../store/pomodoroStore';
+import useRewardStore from '../../store/rewardStore';
 
 function Dashboard() {
   const [showHelp, setShowHelp] = useState(false);

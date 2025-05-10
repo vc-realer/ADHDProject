@@ -21,9 +21,9 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import useTaskStore from '../store/taskStore';
-import usePomodoroStore from '../store/pomodoroStore';
-import useRewardStore from '../store/rewardStore';
+import useTaskStore from '../../store/taskStore';
+import usePomodoroStore from '../../store/pomodoroStore';
+import useRewardStore from '../../store/rewardStore';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 

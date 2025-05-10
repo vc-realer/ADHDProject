@@ -33,9 +33,9 @@ import {
   Check as CheckIcon,
   Help as HelpIcon,
 } from '@mui/icons-material';
-import useTaskStore from '../store/taskStore';
-import useRewardStore from '../store/rewardStore';
-import useSoundStore from '../store/soundStore';
+import useTaskStore from '../../store/taskStore';
+import useRewardStore from '../../store/rewardStore';
+import useSoundStore from '../../store/soundStore';
 
 const quadrants = [
   { id: 'q1', title: 'Urgent & Important', color: '#ff6b6b', points: 15 },
