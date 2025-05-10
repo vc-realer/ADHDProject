@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Grid,
@@ -23,6 +23,7 @@ import {
   Step,
   StepLabel,
   StepContent,
+  Stack,
 } from '@mui/material';
 import {
   Delete as DeleteIcon,
@@ -53,6 +54,7 @@ function TaskList() {
     isImportant: false,
     isUrgent: false,
     dueDate: '',
+    dueTime: '23:59',
   });
   const [showHelp, setShowHelp] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -83,8 +85,12 @@ function TaskList() {
       description: 'Tasks in Q1 (Urgent & Important) are your top priorities. Q2 tasks are important for long-term goals. Q3 tasks can often be delegated. Q4 tasks should be minimized or eliminated.',
     },
     {
-      label: 'Earning Points',
+      label: 'Points System',
       description: 'Completing tasks earns you points based on their quadrant: Q1 tasks give 15 points, Q2 tasks give 10 points, Q3 tasks give 5 points, and Q4 tasks give 1 point. These points can be used in the Rewards page.',
+    },
+    {
+      label: 'Task Deadlines',
+      description: 'Be careful with task deadlines! If you don\'t complete a task before its due date, you\'ll lose points equal to the reward you would have received. For example, missing a Q1 task deadline will cost you 15 points. This encourages timely task completion and helps maintain accountability.',
     },
   ];
 
@@ -99,15 +105,35 @@ function TaskList() {
     return getQuadrantFromFlags(taskForm.isImportant, taskForm.isUrgent);
   };
 
+  const getDefaultDeadline = () => {
+    const now = new Date();
+    now.setHours(23, 59, 0, 0);
+    return now.toISOString().split('T')[0];
+  };
+
+  const formatDateTime = (dateStr, timeStr) => {
+    if (!dateStr) return '';
+    const date = new Date(`${dateStr}T${timeStr}`);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
   const handleOpen = (task = null) => {
     if (task) {
       setEditingTask(task);
+      const taskDate = task.dueDate ? new Date(task.dueDate) : null;
       setTaskForm({
         title: task.title,
         description: task.description,
         isImportant: task.quadrant === 'q1' || task.quadrant === 'q2',
         isUrgent: task.quadrant === 'q1' || task.quadrant === 'q3',
-        dueDate: task.dueDate || '',
+        dueDate: taskDate ? taskDate.toISOString().split('T')[0] : '',
+        dueTime: taskDate ? taskDate.toTimeString().slice(0, 5) : '23:59',
       });
     } else {
       setEditingTask(null);
@@ -116,7 +142,8 @@ function TaskList() {
         description: '',
         isImportant: false,
         isUrgent: false,
-        dueDate: new Date().toISOString().split('T')[0],
+        dueDate: getDefaultDeadline(),
+        dueTime: '23:59',
       });
     }
     setOpen(true);
@@ -133,9 +160,11 @@ function TaskList() {
     const taskData = {
       ...taskForm,
       quadrant,
+      dueDate: taskForm.dueDate ? `${taskForm.dueDate}T${taskForm.dueTime}` : null,
     };
     delete taskData.isImportant;
     delete taskData.isUrgent;
+    delete taskData.dueTime;
 
     if (editingTask) {
       updateTask(editingTask.id, taskData);
@@ -176,6 +205,27 @@ function TaskList() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  const checkOverdueTasks = () => {
+    const now = new Date();
+    tasks.forEach(task => {
+      if (!task.completed && task.dueDate) {
+        const dueDate = new Date(task.dueDate);
+        if (dueDate < now) {
+          const quadrant = quadrants.find(q => q.id === task.quadrant);
+          addPoints(-quadrant.points);
+          completeTask(task.id);
+          playSound('notification');
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkOverdueTasks();
+    const interval = setInterval(checkOverdueTasks, 3600000);
+    return () => clearInterval(interval);
+  }, [tasks]);
 
   return (
     <Box>
@@ -238,9 +288,42 @@ function TaskList() {
                 height: '100%',
               }}
             >
-              <Typography variant="h6" gutterBottom>
-                {quadrant.title}
-              </Typography>
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                mb: 2 
+              }}>
+                <Typography variant="h6">
+                  {quadrant.title}
+                </Typography>
+                <Box
+                  sx={{
+                    bgcolor: `${quadrant.color}15`,
+                    color: quadrant.color,
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: '12px',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                  }}
+                >
+                  {tasks.filter((task) => task.quadrant === quadrant.id && !task.completed).length}
+                  <Typography 
+                    component="span" 
+                    sx={{ 
+                      fontSize: '0.75rem',
+                      opacity: 0.8,
+                      ml: 0.5 
+                    }}
+                  >
+                    tasks
+                  </Typography>
+                </Box>
+              </Box>
               <List>
                 {tasks
                   .filter((task) => task.quadrant === quadrant.id && !task.completed)
@@ -251,14 +334,21 @@ function TaskList() {
                         bgcolor: 'background.paper',
                         mb: 1,
                         borderRadius: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        p: 2,
+                        '&:hover': {
+                          bgcolor: 'action.hover',
+                        },
                       }}
                     >
-                      <Checkbox
-                        edge="start"
-                        onChange={() => handleTaskComplete(task.id)}
-                      />
                       <ListItemText
-                        primary={task.title}
+                        primary={
+                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                            {task.title}
+                          </Typography>
+                        }
                         secondary={
                           <>
                             {task.description}
@@ -267,20 +357,50 @@ function TaskList() {
                                 component="span"
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ display: 'block' }}
+                                sx={{ display: 'block', mt: 0.5 }}
                               >
-                                Due: {new Date(task.dueDate).toLocaleDateString()}
+                                Due: {formatDateTime(task.dueDate.split('T')[0], task.dueDate.split('T')[1])}
                               </Typography>
                             )}
                           </>
                         }
+                        sx={{ flex: 1 }}
                       />
-                      <ListItemSecondaryAction>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          size="medium"
+                          onClick={() => handleTaskComplete(task.id)}
+                          startIcon={<CheckIcon sx={{ fontSize: '1.2rem' }} />}
+                          sx={{
+                            minWidth: '120px',
+                            height: '40px',
+                            borderRadius: '20px',
+                            textTransform: 'none',
+                            fontWeight: 600,
+                            fontSize: '1rem',
+                            boxShadow: 2,
+                            px: 3,
+                            '&:hover': {
+                              boxShadow: 4,
+                              transform: 'translateY(-1px)',
+                            },
+                            transition: 'all 0.2s ease-in-out',
+                          }}
+                        >
+                          Finish
+                        </Button>
                         <IconButton
                           edge="end"
                           aria-label="edit"
                           onClick={() => handleOpen(task)}
-                          sx={{ mr: 1 }}
+                          sx={{ 
+                            color: 'primary.main',
+                            '&:hover': {
+                              bgcolor: 'primary.lighter',
+                            },
+                          }}
                         >
                           <EditIcon />
                         </IconButton>
@@ -288,10 +408,16 @@ function TaskList() {
                           edge="end"
                           aria-label="delete"
                           onClick={() => handleDeleteTask(task.id)}
+                          sx={{ 
+                            color: 'error.main',
+                            '&:hover': {
+                              bgcolor: 'error.lighter',
+                            },
+                          }}
                         >
                           <DeleteIcon />
                         </IconButton>
-                      </ListItemSecondaryAction>
+                      </Box>
                     </ListItem>
                   ))}
               </List>
@@ -393,16 +519,33 @@ function TaskList() {
                 </Typography>
               </Box>
             </Box>
-            <TextField
-              fullWidth
-              label="Due Date"
-              type="date"
-              value={taskForm.dueDate}
-              onChange={(e) =>
-                setTaskForm({ ...taskForm, dueDate: e.target.value })
-              }
-              InputLabelProps={{ shrink: true }}
-            />
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                Due Date & Time
+              </Typography>
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  fullWidth
+                  label="Date"
+                  type="date"
+                  value={taskForm.dueDate}
+                  onChange={(e) =>
+                    setTaskForm({ ...taskForm, dueDate: e.target.value })
+                  }
+                  InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                  fullWidth
+                  label="Time"
+                  type="time"
+                  value={taskForm.dueTime}
+                  onChange={(e) =>
+                    setTaskForm({ ...taskForm, dueTime: e.target.value })
+                  }
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Stack>
+            </Box>
           </Box>
         </DialogContent>
         <DialogActions>
