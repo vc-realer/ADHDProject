@@ -42,10 +42,15 @@ function Profile() {
   // Calculate session statistics
   const totalSessions = sessions.length;
   const totalSessionTime = sessions.reduce((acc, session) => {
-    const start = new Date(session.startTime);
-    const end = new Date(session.endTime);
-    return acc + (end - start) / 1000 / 60; // Convert to minutes
-  }, 0);
+  if (!session.startTime || !session.endTime) return acc;
+
+  const start = new Date(session.startTime);
+  const end = new Date(session.endTime);
+
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return acc;
+
+  return acc + (end - start) / 1000 / 60;
+}, 0);
 
   // Prepare chart data
   const taskChartData = [

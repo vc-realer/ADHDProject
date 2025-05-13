@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -23,16 +23,16 @@ import {
   Step,
   StepLabel,
   StepContent,
-} from '@mui/material';
-import useRewardStore from '../../store/rewardStore';
-import useSoundStore from '../../store/soundStore';
-import HelpIcon from '@mui/icons-material/Help';
+} from "@mui/material";
+import useRewardStore from "../../store/rewardStore";
+import useSoundStore from "../../store/soundStore";
+import HelpIcon from "@mui/icons-material/Help";
 
 const rarityColors = {
-  common: '#95a5a6',
-  rare: '#3498db',
-  epic: '#9b59b6',
-  legendary: '#f1c40f',
+  common: "#95a5a6",
+  rare: "#3498db",
+  epic: "#9b59b6",
+  legendary: "#f1c40f",
 };
 
 const rarityProbabilities = {
@@ -45,59 +45,59 @@ const rarityProbabilities = {
 const rewards = [
   {
     id: 1,
-    name: 'Common Reward 1',
-    description: 'A basic reward',
-    rarity: 'common',
-    image: '🎁',
+    name: "Common Reward 1",
+    description: "A basic reward",
+    rarity: "common",
+    image: "🎁",
   },
   {
     id: 2,
-    name: 'Common Reward 2',
-    description: 'Another basic reward',
-    rarity: 'common',
-    image: '🎯',
+    name: "Common Reward 2",
+    description: "Another basic reward",
+    rarity: "common",
+    image: "🎯",
   },
   {
     id: 3,
-    name: 'Rare Reward 1',
-    description: 'A special reward',
-    rarity: 'rare',
-    image: '🏆',
+    name: "Rare Reward 1",
+    description: "A special reward",
+    rarity: "rare",
+    image: "🏆",
   },
   {
     id: 4,
-    name: 'Rare Reward 2',
-    description: 'Another special reward',
-    rarity: 'rare',
-    image: '🎨',
+    name: "Rare Reward 2",
+    description: "Another special reward",
+    rarity: "rare",
+    image: "🎨",
   },
   {
     id: 5,
-    name: 'Epic Reward 1',
-    description: 'An amazing reward',
-    rarity: 'epic',
-    image: '🌟',
+    name: "Epic Reward 1",
+    description: "An amazing reward",
+    rarity: "epic",
+    image: "🌟",
   },
   {
     id: 6,
-    name: 'Epic Reward 2',
-    description: 'Another amazing reward',
-    rarity: 'epic',
-    image: '💫',
+    name: "Epic Reward 2",
+    description: "Another amazing reward",
+    rarity: "epic",
+    image: "💫",
   },
   {
     id: 7,
-    name: 'Legendary Reward 1',
-    description: 'An incredible reward',
-    rarity: 'legendary',
-    image: '👑',
+    name: "Legendary Reward 1",
+    description: "An incredible reward",
+    rarity: "legendary",
+    image: "👑",
   },
   {
     id: 8,
-    name: 'Legendary Reward 2',
-    description: 'Another incredible reward',
-    rarity: 'legendary',
-    image: '🏰',
+    name: "Legendary Reward 2",
+    description: "Another incredible reward",
+    rarity: "legendary",
+    image: "🏰",
   },
 ];
 
@@ -114,24 +114,29 @@ function Rewards() {
 
   const tutorialSteps = [
     {
-      label: 'Understanding Points',
-      description: 'You earn points by completing tasks in the Task List. Different tasks give different points based on their importance and urgency. Q1 tasks give 15 points, Q2 tasks give 10 points, Q3 tasks give 5 points, and Q4 tasks give 1 point.',
+      label: "Understanding Points",
+      description:
+        "You earn points by completing tasks in the Task List. Different tasks give different points based on their importance and urgency. Q1 tasks give 15 points, Q2 tasks give 10 points, Q3 tasks give 5 points, and Q4 tasks give 1 point.",
     },
     {
-      label: 'The Gacha System',
-      description: 'Use your points to try your luck with the Gacha system! Each try costs 30 points. Click the "Try Your Luck!" button to get a random reward. The rewards have different rarities: Common (60%), Rare (30%), Epic (8%), and Legendary (2%).',
+      label: "The Gacha System",
+      description:
+        'Use your points to try your luck with the Gacha system! Each try costs 30 points. Click the "Try Your Luck!" button to get a random reward. The rewards have different rarities: Common (60%), Rare (30%), Epic (8%), and Legendary (2%).',
     },
     {
-      label: 'Reward Rarities',
-      description: 'Common rewards are basic items, Rare rewards are special items, Epic rewards are amazing items, and Legendary rewards are the most incredible items. Each rarity has its own color: gray for Common, blue for Rare, purple for Epic, and gold for Legendary.',
+      label: "Reward Rarities",
+      description:
+        "Common rewards are basic items, Rare rewards are special items, Epic rewards are amazing items, and Legendary rewards are the most incredible items. Each rarity has its own color: gray for Common, blue for Rare, purple for Epic, and gold for Legendary.",
     },
     {
-      label: 'Your Inventory',
-      description: 'All rewards you receive are stored in your inventory. You can view your collection of rewards in the "Your Inventory" section. Each reward shows its name, rarity, and description.',
+      label: "Your Inventory",
+      description:
+        'All rewards you receive are stored in your inventory. You can view your collection of rewards in the "Your Inventory" section. Each reward shows its name, rarity, and description.',
     },
     {
-      label: 'Available Rewards',
-      description: 'The "Available Rewards" section shows all possible rewards you can get from the Gacha system. This helps you see what you might get and what you\'re still missing from your collection.',
+      label: "Available Rewards",
+      description:
+        'The "Available Rewards" section shows all possible rewards you can get from the Gacha system. This helps you see what you might get and what you\'re still missing from your collection.',
     },
   ];
 
@@ -151,25 +156,32 @@ function Rewards() {
     const availableRewards = rewards.filter(
       (reward) => reward.rarity === selectedRarity
     );
-    return availableRewards[Math.floor(Math.random() * availableRewards.length)];
+    if (availableRewards.length === 0) return null;
+    return availableRewards[
+      Math.floor(Math.random() * availableRewards.length)
+    ];
   };
 
   const handleGacha = () => {
     if (points >= 30) {
       const reward = getRandomReward();
+      if (!reward) {
+        playSound("notification");
+        return;
+      }
       setCurrentReward(reward);
       setOpen(true);
       spendPoints(30);
       addToInventory(reward);
-      playSound('reward');
+      playSound("reward");
     } else {
-      playSound('notification');
+      playSound("notification");
     }
   };
 
   const handleCloseDialog = () => {
     setOpen(false);
-    playSound('notification');
+    playSound("notification");
   };
 
   const handleNext = () => {
@@ -186,7 +198,7 @@ function Rewards() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4">Rewards</Typography>
         <Tooltip title="Help">
           <IconButton onClick={() => setShowHelp(true)}>
@@ -195,22 +207,22 @@ function Rewards() {
         </Tooltip>
       </Box>
 
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
           mb: 4,
-          position: 'relative',
-          '&::before': {
+          position: "relative",
+          "&::before": {
             content: '""',
-            position: 'absolute',
-            top: '50%',
+            position: "absolute",
+            top: "50%",
             left: 0,
             right: 0,
-            height: '1px',
-            backgroundColor: 'divider',
+            height: "1px",
+            backgroundColor: "divider",
             zIndex: 0,
-          }
+          },
         }}
       >
         <Button
@@ -221,21 +233,21 @@ function Rewards() {
             zIndex: 1,
             py: 1.5,
             px: 4,
-            fontSize: '1.1rem',
-            borderRadius: '50px',
+            fontSize: "1.1rem",
+            borderRadius: "50px",
             boxShadow: 3,
-            background: 'linear-gradient(45deg, #FF6B6B 30%, #FF8E53 90%)',
-            '&:hover': {
+            background: "linear-gradient(45deg, #FF6B6B 30%, #FF8E53 90%)",
+            "&:hover": {
               boxShadow: 6,
-              transform: 'translateY(-2px)',
-              background: 'linear-gradient(45deg, #FF8E53 30%, #FF6B6B 90%)',
+              transform: "translateY(-2px)",
+              background: "linear-gradient(45deg, #FF8E53 30%, #FF6B6B 90%)",
             },
-            '&:disabled': {
-              background: 'linear-gradient(45deg, #BDBDBD 30%, #9E9E9E 90%)',
-              transform: 'none',
+            "&:disabled": {
+              background: "linear-gradient(45deg, #BDBDBD 30%, #9E9E9E 90%)",
+              transform: "none",
               boxShadow: 3,
             },
-            transition: 'all 0.2s ease-in-out',
+            transition: "all 0.2s ease-in-out",
           }}
         >
           Try Your Luck! (30 points)
@@ -271,7 +283,8 @@ function Rewards() {
                           variant="body2"
                           color={rarityColors[item.rarity]}
                         >
-                          {item.rarity.charAt(0).toUpperCase() + item.rarity.slice(1)}
+                          {item.rarity.charAt(0).toUpperCase() +
+                            item.rarity.slice(1)}
                         </Typography>
                         <br />
                         {item.description}
@@ -297,7 +310,7 @@ function Rewards() {
                       <Typography
                         variant="h1"
                         component="div"
-                        sx={{ textAlign: 'center', mb: 2 }}
+                        sx={{ textAlign: "center", mb: 2 }}
                       >
                         {reward.image}
                       </Typography>
@@ -308,7 +321,8 @@ function Rewards() {
                         variant="body2"
                         color={rarityColors[reward.rarity]}
                       >
-                        {reward.rarity.charAt(0).toUpperCase() + reward.rarity.slice(1)}
+                        {reward.rarity.charAt(0).toUpperCase() +
+                          reward.rarity.slice(1)}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {reward.description}
@@ -325,7 +339,7 @@ function Rewards() {
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>Congratulations!</DialogTitle>
         <DialogContent>
-          <Box sx={{ textAlign: 'center', py: 2 }}>
+          <Box sx={{ textAlign: "center", py: 2 }}>
             <Typography variant="h1" component="div" sx={{ mb: 2 }}>
               {currentReward?.image}
             </Typography>
@@ -337,10 +351,14 @@ function Rewards() {
               color={rarityColors[currentReward?.rarity]}
               gutterBottom
             >
-              {currentReward?.rarity.charAt(0).toUpperCase() +
-                currentReward?.rarity.slice(1)}
+              {currentReward?.rarity
+                ? currentReward.rarity.charAt(0).toUpperCase() +
+                  currentReward.rarity.slice(1)
+                : "Unknown"}
             </Typography>
-            <Typography variant="body1">{currentReward?.description}</Typography>
+            <Typography variant="body1">
+              {currentReward?.description}
+            </Typography>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -354,9 +372,7 @@ function Rewards() {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>
-          How to Use the Rewards System
-        </DialogTitle>
+        <DialogTitle>How to Use the Rewards System</DialogTitle>
         <DialogContent>
           <Stepper activeStep={activeStep} orientation="vertical">
             {tutorialSteps.map((step, index) => (
@@ -364,25 +380,27 @@ function Rewards() {
                 <StepLabel>{step.label}</StepLabel>
                 <StepContent>
                   <Typography>
-                    {step.label === 'The Gacha System' 
+                    {step.label === "The Gacha System"
                       ? 'Use your points to try your luck with the Gacha system! Each try costs 30 points. Click the "Try Your Luck!" button to get a random reward. The rewards have different rarities: Common (60%), Rare (30%), Epic (8%), and Legendary (2%).'
-                      : step.description
-                    }
+                      : step.description}
                   </Typography>
                   <Box sx={{ mb: 2, mt: 2 }}>
                     <div>
                       <Button
                         variant="contained"
-                        onClick={index === tutorialSteps.length - 1 
-                          ? () => {
-                              setShowHelp(false);
-                              handleReset();
-                            }
-                          : handleNext
+                        onClick={
+                          index === tutorialSteps.length - 1
+                            ? () => {
+                                setShowHelp(false);
+                                handleReset();
+                              }
+                            : handleNext
                         }
                         sx={{ mt: 1, mr: 1 }}
                       >
-                        {index === tutorialSteps.length - 1 ? 'Finish' : 'Continue'}
+                        {index === tutorialSteps.length - 1
+                          ? "Finish"
+                          : "Continue"}
                       </Button>
                       <Button
                         disabled={index === 0}
@@ -398,8 +416,8 @@ function Rewards() {
             ))}
           </Stepper>
         </DialogContent>
-        <DialogActions sx={{ justifyContent: 'space-between', px: 3, py: 2 }}>
-          <Button 
+        <DialogActions sx={{ justifyContent: "space-between", px: 3, py: 2 }}>
+          <Button
             onClick={() => {
               setShowHelp(false);
               handleReset();
@@ -408,7 +426,7 @@ function Rewards() {
           >
             Skip Tutorial
           </Button>
-          <Button 
+          <Button
             onClick={() => {
               setShowHelp(false);
               handleReset();
@@ -423,4 +441,4 @@ function Rewards() {
   );
 }
 
-export default Rewards; 
+export default Rewards;
